@@ -1,5 +1,4 @@
 import { new_block, get_translation } from './block.js';
-import { processor_options } from './processor_options.js';
 import { state } from './state.js';
 
 let default_compiler;
@@ -23,9 +22,9 @@ const find_contextual_names = (compiler, node) => {
 };
 
 // extract scripts to lint from component definition
-export const preprocess = text => {
-	const compiler = processor_options.custom_compiler || default_compiler || (default_compiler = require('svelte/compiler'));
-	if (processor_options.ignore_styles) {
+export const preprocess = (text, filename, options) => {
+	const compiler = options.compiler || default_compiler || (default_compiler = require('svelte/compiler'));
+	if (options.ignoreStyles) {
 		// wipe the appropriate <style> tags in the file
 		text = text.replace(/<style(\s[^]*?)?>[^]*?<\/style>/gi, (match, attributes = '') => {
 			const attrs = {};
@@ -37,13 +36,13 @@ export const preprocess = text => {
 					attrs[attr.slice(0, p)] = '\'"'.includes(attr[p + 1]) ? attr.slice(p + 2, -1) : attr.slice(p + 1);
 				}
 			});
-			return processor_options.ignore_styles(attrs) ? match.replace(/\S/g, ' ') : match;
+			return options.ignoreStyles(attrs) ? match.replace(/\S/g, ' ') : match;
 		});
 	}
 	// get information about the component
 	let result;
 	try {
-		result = compiler.compile(text, { generate: false, ...processor_options.compiler_options });
+		result = compiler.compile(text, { generate: false, ...options.compilerOptions });
 	} catch ({ name, message, start, end }) {
 		// convert the error to a linting message, store it, and return
 		state.messages = [
@@ -64,7 +63,7 @@ export const preprocess = text => {
 	state.var_names = new Set(vars.map(v => v.name));
 
 	// convert warnings to linting messages
-	state.messages = (processor_options.ignore_warnings ? warnings.filter(warning => !processor_options.ignore_warnings(warning)) : warnings).map(({ code, message, start, end }) => ({
+	state.messages = (options.ignoreWarnings ? warnings.filter(warning => !options.ignoreWarnings(warning)) : warnings).map(({ code, message, start, end }) => ({
 		ruleId: code,
 		severity: 1,
 		message,
@@ -153,5 +152,5 @@ export const preprocess = text => {
 	}
 
 	// return processed string
-	return [...state.blocks].map(([filename, { transformed_code: text }]) => processor_options.named_blocks ? { text, filename } : text);
+	return [...state.blocks].map(([filename, { transformed_code: text }]) => options.namedBlocks ? { text, filename } : text);
 };

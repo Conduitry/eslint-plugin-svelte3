@@ -41,20 +41,20 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['**/*.svelte'],
-      processor: 'svelte3/svelte3'
+      files: ['*.svelte'],
+      processor: 'svelte3/svelte3',
+      processorOptions: {
+        // ...
+      }
     }
   ],
   rules: {
-    // ...
-  },
-  settings: {
     // ...
   }
 };
 ```
 
-By default, this plugin needs to be able to `require('svelte/compiler')`. If ESLint, this plugin, and Svelte are all installed locally in your project, this should not be a problem.
+By default, this plugin needs to be able to `require('svelte/compiler')`. If this plugin and Svelte are both installed locally in your project, this should not be a problem.
 
 ## Interactions with other plugins
 
@@ -62,33 +62,33 @@ Care needs to be taken when using this plugin alongside others. Take a look at [
 
 ## Configuration
 
-There are a few settings you can use to adjust this plugin's behavior. These go in the `settings` object in your ESLint configuration.
+There are a few options you can use to adjust this plugin's behavior. These go in the `processorOptions` object in your ESLint configuration.
 
-Passing a function as a value for a setting (which some of the settings below require) is only possible when using a CommonJS `.eslintrc.js` file, and not a JSON or YAML configuration file.
+Passing a function as a value for an option (which some of the options below require) is only possible when using a CommonJS `.eslintrc.js` file, and not a JSON or YAML configuration file.
 
-### `svelte3/ignore-warnings`
+### `ignoreWarnings`
 
-This setting can be given a function that indicates whether to ignore a warning in the linting. The function will be passed a warning object and should return a boolean.
+This option can be given a function that indicates whether to ignore a warning in the linting. The function will be passed a warning object and should return a boolean.
 
 The default is to not ignore any warnings.
 
-### `svelte3/compiler-options`
+### `compilerOptions`
 
-Most compiler options do not affect the validity of compiled components, but a couple of them can. If you are compiling to custom elements, or for some other reason need to control how the plugin compiles the components it's linting, you can use this setting.
+Most compiler options do not affect the validity of compiled components, but a couple of them can. If you are compiling to custom elements, or for some other reason need to control how the plugin compiles the components it's linting, you can use this option.
 
-This setting can be given an object of compiler options.
+This option can be given an object of compiler options.
 
 The default is to compile with `{ generate: false }`.
 
-### `svelte3/ignore-styles`
+### `ignoreStyles`
 
 If you're using some sort of preprocessor on the component styles, then it's likely that when this plugin calls the Svelte compiler on your component, it will throw an exception. In a perfect world, this plugin would be able to apply the preprocessor to the component and then use source maps to translate any warnings back to the original source. In the current reality, however, you can instead simply disregard styles written in anything other than standard CSS. You won't get warnings about the styles from the linter, but your application will still use them (of course) and compiler warnings will still appear in your build logs.
 
-This setting can be given a function that accepts an object of attributes on a `<style>` tag (like that passed to a Svelte preprocessor) and returns whether to ignore the style block for the purposes of linting.
+This option can be given a function that accepts an object of attributes on a `<style>` tag (like that passed to a Svelte preprocessor) and returns whether to ignore the style block for the purposes of linting.
 
 The default is to not ignore any styles.
 
-### `svelte3/named-blocks`
+### `namedBlocks`
 
 When an [ESLint processor](https://eslint.org/docs/user-guide/configuring#specifying-processor) processes a file, it is able to output named code blocks, which can each have their own linting configuration. When this setting is enabled, the code extracted from `<script context='module'>` tag, the `<script>` tag, and the template are respectively given the block names `module.js`, `instance.js`, and `template.js`.
 
@@ -96,11 +96,11 @@ This means that to override linting rules in Svelte components, you'd instead ha
 
 The default is to not use named code blocks.
 
-### `svelte3/compiler`
+### `compiler`
 
 In some esoteric setups, this plugin might not be able to find the correct instance of the Svelte compiler to use.
 
-This setting can be given the result of `require('.../path/to/svelte/compiler')` to indicate which instance should be used in linting the components.
+This option can be given the result of `require('.../path/to/svelte/compiler')` to indicate which instance should be used in linting the components.
 
 The default is `require('svelte/compiler')` from wherever the plugin is installed to.
 

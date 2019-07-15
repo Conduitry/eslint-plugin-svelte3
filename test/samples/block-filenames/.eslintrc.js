@@ -3,8 +3,8 @@ module.exports = {
 		curly: 'error',
 		'no-undef': 'error',
 	},
-	settings: {
-		'svelte3/named-blocks': true
+	processorOptions: {
+		namedBlocks: true
 	},
 	overrides: [
 		{
