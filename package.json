@@ -32,7 +32,10 @@
 	},
 	"devDependencies": {
 		"eslint": ">=6.0.0",
-		"rollup": "^1",
+		"magic-string": "^0.25",
+		"rollup": "^1.12",
+		"rollup-plugin-node-resolve": "^5",
+		"sourcemap-codec": "1.4.6",
 		"svelte": "^3.2.0"
 	}
 }

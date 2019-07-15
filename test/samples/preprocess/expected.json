@@ -1,0 +1,37 @@
+[
+	{
+		"ruleId": "arrow-spacing",
+		"line": 2,
+		"column": 5,
+		"endLine": 2,
+		"endColumn": 6,
+		"fix": {
+			"range": [
+				9,
+				9
+			],
+			"text": " "
+		}
+	},
+	{
+		"ruleId": "missing-declaration",
+		"line": 2,
+		"column": 8,
+		"endLine": 2,
+		"endColumn": 11
+	},
+	{
+		"ruleId": "arrow-spacing",
+		"line": 2,
+		"column": 8,
+		"endLine": 2,
+		"endColumn": 11,
+		"fix": {
+			"range": [
+				11,
+				11
+			],
+			"text": " "
+		}
+	}
+]

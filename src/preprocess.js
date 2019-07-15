@@ -1,6 +1,7 @@
 import { new_block, get_translation } from './block.js';
 import { processor_options } from './processor_options.js';
 import { state } from './state.js';
+import { get_line_offsets } from './utils.js';
 
 let default_compiler;
 
@@ -39,6 +40,16 @@ export const preprocess = text => {
 			});
 			return processor_options.ignore_styles(attrs) ? match.replace(/\S/g, ' ') : match;
 		});
+	}
+	// run preprocessor if present
+	if (processor_options.svelte_preprocess) {
+		const result = processor_options.svelte_preprocess(text);
+		if (result) {
+			state.pre_line_offsets = get_line_offsets(text);
+			text = result.code;
+			state.post_line_offsets = get_line_offsets(text);
+			state.mappings = result.mappings;
+		}
 	}
 	// get information about the component
 	let result;
