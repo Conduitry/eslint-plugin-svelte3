@@ -1,5 +1,5 @@
 import { state, reset } from './state.js';
-import { map } from './sourcemap.js';
+import { unmap } from './sourcemap.js';
 import { get_line_offsets } from './utils.js';
 
 // transform a linting message according to the module/instance script info we've gathered
@@ -119,7 +119,9 @@ export const postprocess = blocks_messages => {
 			}
 		}
 	}
-	map();
+	if (state.mappings) {
+		state.messages = state.messages.filter(unmap);
+	}
 
 	// sort messages and return
 	const sorted_messages = state.messages.sort((a, b) => a.line - b.line || a.column - b.column);

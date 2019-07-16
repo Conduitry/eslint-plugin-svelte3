@@ -7,6 +7,7 @@ module.exports = {
 	settings: {
 		'svelte3/preprocess': code => {
 			const s = new MagicString(code);
+			s.appendLeft(1, '\n{bar}\n');
 			s.overwrite(4, 5, 'hello');
 			s.overwrite(3, 4, '');
 			return { code: s.toString(), mappings: s.generateMap().mappings };

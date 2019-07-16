@@ -2,6 +2,7 @@ import { new_block, get_translation } from './block.js';
 import { processor_options } from './processor_options.js';
 import { state } from './state.js';
 import { get_line_offsets } from './utils.js';
+import { decode } from 'sourcemap-codec';
 
 let default_compiler;
 
@@ -48,7 +49,7 @@ export const preprocess = text => {
 			state.pre_line_offsets = get_line_offsets(text);
 			text = result.code;
 			state.post_line_offsets = get_line_offsets(text);
-			state.mappings = result.mappings;
+			state.mappings = decode(result.mappings);
 		}
 	}
 	// get information about the component
