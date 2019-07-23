@@ -1,9 +1,0 @@
-[
-	{
-		"ruleId": "missing-declaration",
-		"line": 9,
-		"column": 2,
-		"endLine": 9,
-		"endColumn": 5
-	}
-]

@@ -1,4 +1,0 @@
-<script>
-	foo
-		bar
-	</script>
